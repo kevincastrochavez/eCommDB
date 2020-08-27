@@ -63,12 +63,18 @@ const updateUser = (req, res, next) => {
   next();
 };
 
-app.route("/api/vi/products").get(getAllProducts);
-app.route("/api/vi/products/category/:category").get(getProductsByCategory);
-app.route("/api/vi/products/:id").get(getProductById);
+const productRouter = express.Router();
+const userRouter = express.Router();
 
-app.route("/api/vi/users").post(createUser);
-app.route("/api/vi/users/:id").patch(updateUser);
+productRouter.route("/").get(getAllProducts);
+productRouter.route("/category/:category").get(getProductsByCategory);
+productRouter.route("/:id").get(getProductById);
+
+userRouter.route("/").post(createUser);
+userRouter.route("/:id").patch(updateUser);
+
+app.use("/api/v1/products", productRouter);
+app.use("/api/vi/users", userRouter);
 
 const port = 8000;
 app.listen(port, () => {
