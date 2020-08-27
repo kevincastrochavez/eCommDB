@@ -1,7 +1,11 @@
 const fs = require("fs");
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
+
+app.use(morgan("dev"));
+app.use(express.json());
 
 const products = JSON.parse(fs.readFileSync("./dev-data/products.json"));
 
@@ -15,15 +19,17 @@ const getAllProducts = (req, res) => {
   });
 };
 
-const getProductByCategory = (req, res) => {
+const getProductsByCategory = (req, res) => {
   console.log(req.params);
   const category = req.params.category;
-  const productByCategory = products.find((item) => item.category === category);
+  const productsByCategory = products.find(
+    (item) => item.category === category
+  );
 
   res.status(200).json({
     status: "success",
     data: {
-      productByCategory,
+      productsByCategory,
     },
   });
 };
@@ -41,9 +47,28 @@ const getProductById = (req, res) => {
   });
 };
 
-app.get("/api/vi/products", getAllProducts);
-app.get("/api/vi/products/:category", getProductByCategory);
-app.get("/api/vi/products/:id", getProductById);
+const createUser = (req, res, next) => {
+  res.status(500).json({
+    status: "success",
+    message: "Not defined",
+  });
+  next();
+};
+
+const updateUser = (req, res, next) => {
+  res.status(500).json({
+    status: "success",
+    message: "Not defined",
+  });
+  next();
+};
+
+app.route("/api/vi/products").get(getAllProducts);
+app.route("/api/vi/products/category/:category").get(getProductsByCategory);
+app.route("/api/vi/products/:id").get(getProductById);
+
+app.route("/api/vi/users").post(createUser);
+app.route("/api/vi/users/:id").patch(updateUser);
 
 const port = 8000;
 app.listen(port, () => {
