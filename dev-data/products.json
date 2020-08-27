@@ -1,6 +1,7 @@
 [
   {
     "name": "Black Blouse",
+    "id": "1",
     "price": "25.00",
     "category": "Blouses",
     "picture": "blouse-1.jpg",
